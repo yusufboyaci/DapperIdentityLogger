@@ -1,6 +1,8 @@
 ﻿using DATAACCESS.Abstract;
+using ENTITIES;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 using System.Security.Claims;
 using UI.Models;
 
@@ -9,9 +11,11 @@ namespace UI.Controllers
     public class AccountController : Controller
     {
         private readonly IUserRepository _userRepository;
-        public AccountController(IUserRepository userRepository)
+        private readonly ILogger<AccountController> _logger;
+        public AccountController(IUserRepository userRepository, ILogger<AccountController> logger)
         {
             _userRepository = userRepository;
+            _logger = logger;
         }
         public IActionResult Index()
         {
@@ -23,6 +27,7 @@ namespace UI.Controllers
             var user = _userRepository.GetAll().FirstOrDefault(x => x.Username == username && x.Password == password);
             if (user != null)
             {
+                _logger.LogWarning($"{user.Name} {user.Surname} isimli ve {user.Id} li kullanıcı giriş yaptı");
                 return true;
             }
             else
@@ -50,8 +55,16 @@ namespace UI.Controllers
         }
         public async Task<IActionResult> LogOut()
         {
+            //var user = _userRepository.GetById(model.);
+            //_logger.LogWarning($"{user.Name} {user.Surname} isimli ve {user.Id} li kullanıcı giriş yaptı");
             await HttpContext.SignOutAsync();
             return RedirectToAction("Index", "Home");
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
     } 
