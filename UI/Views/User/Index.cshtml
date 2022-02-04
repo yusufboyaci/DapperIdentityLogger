@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ENTITIES.User>
+﻿@model IEnumerable<User>
 
 @{
     ViewData["Title"] = "Index";
@@ -9,7 +9,8 @@
 <p>
     <a asp-action="Insert">Create New</a>
 </p>
-<table class="table">
+<input id="searchBar" type="text" placeholder="Search..." />
+<table class="table" id="userTable">
     <thead>
         <tr>
            
@@ -52,7 +53,7 @@
             </td>
             <td>
                 @Html.ActionLink("Update", "Update", new {  id=item.Id  }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new {  id=item.Id  }) |
                 @Html.ActionLink("Delete", "Delete", new {  id=item.Id  })
             </td>
         </tr>
