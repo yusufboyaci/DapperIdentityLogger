@@ -43,6 +43,8 @@ namespace UI.Controllers
             _logger.LogCritical("Kullanıcı silindi.");
             return RedirectToAction("Index", "User");
         }
+        [HttpGet]
+        public IActionResult UserInfo(Guid id) => View(_userRepository.GetById(id));
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
