@@ -48,6 +48,8 @@ namespace UI.Controllers
                 };
                 ClaimsIdentity userIdentity = new ClaimsIdentity(claims,"login");
                 ClaimsPrincipal userPrincipal = new ClaimsPrincipal(userIdentity);
+                User user = _userRepository.GetAll().FirstOrDefault(x => x.Username == loginViewModel.Username && x.Password == loginViewModel.Password) ?? throw new Exception("Böyle bir kullanıcı bulunmamaktadır");
+                HttpContext.Session.SetString("userId", user.Id);
                 await HttpContext.SignInAsync(userPrincipal);
                 return RedirectToAction("Index", "User");   
             }
@@ -56,7 +58,7 @@ namespace UI.Controllers
         public async Task<IActionResult> LogOut()
         {
             //var user = _userRepository.GetById(model.);
-            //_logger.LogWarning($"{user.Name} {user.Surname} isimli ve {user.Id} li kullanıcı giriş yaptı");
+            //_logger.LogWarning($"{user.Name} {user.Surname} isimli ve {user.Id} li kullanıcı çıkış yaptı");
             await HttpContext.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }

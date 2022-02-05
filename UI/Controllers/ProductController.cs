@@ -22,8 +22,9 @@ namespace UI.Controllers
         [HttpPost]
         public IActionResult Insert(Product product)
         {
+            product.UserId = HttpContext.Session.GetString("userId") ?? throw new Exception("Uye Bulunmamaktadır.");
             _productRepository.InsertProduct(product);
-            //product.UserId = User.Claims.FirstOrDefault();
+            
             return RedirectToAction("Index","Product");
         }
         [HttpGet]
@@ -31,6 +32,7 @@ namespace UI.Controllers
         [HttpPost]
         public IActionResult Update(Product product)
         {
+            product.UserId = HttpContext.Session.GetString("userId") ?? throw new Exception("Uye Bulunmamaktadır.");
             _productRepository.UpdateProduct(product);
             return RedirectToAction("Index", "Product");
         }
