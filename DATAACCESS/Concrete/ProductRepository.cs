@@ -57,18 +57,39 @@ namespace DATAACCESS.Concrete
         {
             using(IDbConnection conn = CreateConnection())
             {
-                conn.Execute("InsertUser",new Product
+                conn.Execute("InsertProduct", new Product
                 {
                     Id = Guid.NewGuid().ToString(),
-
-
-                })
+                    Name = product.Name,
+                    Category = product.Category,
+                    ProductNumber = product.ProductNumber,
+                    UserId = product.UserId,
+                }, commandType:CommandType.StoredProcedure);
+                conn.Close();
             }
         }
 
         public void UpdateProduct(Product product)
         {
-            throw new NotImplementedException();
+            using(IDbConnection conn = CreateConnection())
+            {
+                if (product != null)
+                {
+                    conn.Execute("UpdateProduct", new Product
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        Name = product.Name,
+                        Category = product.Category,
+                        ProductNumber = product.ProductNumber,
+                        UserId = product.UserId,
+                    }, commandType:CommandType.StoredProcedure);
+                    conn.Close();
+                }
+                else
+                {
+                    throw new Exception("Ürün Bulunmamaktadır.");
+                }
+            }
         }
     }
 }
