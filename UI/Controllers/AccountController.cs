@@ -1,6 +1,7 @@
 ﻿using DATAACCESS.Abstract;
 using ENTITIES;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Security.Claims;
@@ -21,7 +22,7 @@ namespace UI.Controllers
         {
             return View();
         }
-      
+
         private bool LoginUser(string username, string password)
         {
             var user = _userRepository.GetAll().FirstOrDefault(x => x.Username == username && x.Password == password);
@@ -36,6 +37,7 @@ namespace UI.Controllers
             }
         }
         [HttpGet]
+        // [Authorize]
         public IActionResult Login() => View();
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel loginViewModel)
@@ -46,12 +48,12 @@ namespace UI.Controllers
                 {
                     new Claim(ClaimTypes.Name,loginViewModel.Username),
                 };
-                ClaimsIdentity userIdentity = new ClaimsIdentity(claims,"login");
+                ClaimsIdentity userIdentity = new ClaimsIdentity(claims, "login");
                 ClaimsPrincipal userPrincipal = new ClaimsPrincipal(userIdentity);
                 User user = _userRepository.GetAll().FirstOrDefault(x => x.Username == loginViewModel.Username && x.Password == loginViewModel.Password) ?? throw new Exception("Böyle bir kullanıcı bulunmamaktadır");
                 HttpContext.Session.SetString("userId", user.Id);
                 await HttpContext.SignInAsync(userPrincipal);
-                return RedirectToAction("Index", "User");   
+                return RedirectToAction("Index", "User");
             }
             return View();
         }
@@ -69,5 +71,5 @@ namespace UI.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-    } 
+    }
 }
