@@ -37,7 +37,6 @@ namespace UI.Controllers
             }
         }
         [HttpGet]
-        // [Authorize]
         public IActionResult Login() => View();
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel loginViewModel)

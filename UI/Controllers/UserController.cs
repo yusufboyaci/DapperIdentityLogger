@@ -1,5 +1,6 @@
 ﻿using DATAACCESS.Abstract;
 using ENTITIES;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using UI.Models;
@@ -15,6 +16,7 @@ namespace UI.Controllers
             _userRepository = userRepository;
             _logger = logger;
         }
+        [Authorize(Policy = "UserOnly")]
         public IActionResult Index()
         {
             return View(_userRepository.GetAll());
