@@ -1,11 +1,13 @@
 ﻿using DATAACCESS.Abstract;
 using ENTITIES;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using UI.Models;
 
 namespace UI.Controllers
 {
+    [Authorize]
     public class ProductController : Controller
     {
         private readonly IProductRepository _productRepository;

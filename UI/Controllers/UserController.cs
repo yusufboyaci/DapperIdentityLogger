@@ -6,7 +6,8 @@ using System.Diagnostics;
 using UI.Models;
 
 namespace UI.Controllers
-{
+{    
+    [Authorize]
     public class UserController : Controller
     {
         private readonly IUserRepository _userRepository;
@@ -16,7 +17,7 @@ namespace UI.Controllers
             _userRepository = userRepository;
             _logger = logger;
         }
-        [Authorize(Policy = "UserOnly")]
+        //[Authorize(Policy = "UserOnly")]
         public IActionResult Index()
         {
             return View(_userRepository.GetAll());
